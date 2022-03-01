@@ -1,0 +1,4 @@
+ignores:
+  # commitlint packages are used by husky, but not detected
+  - "@commitlint/cli"
+  - "@commitlint/config-conventional"
