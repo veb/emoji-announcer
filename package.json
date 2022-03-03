@@ -5,7 +5,7 @@
   "repository": "gitlab:wjharney/slack-emoji-announcer",
   "license": "MIT",
   "author": "Will Harney <9564874-wjharney@users.noreply.gitlab.com>",
-  "main": "index.js",
+  "module": "dist/app.js",
   "scripts": {
     "build": "tsc",
     "check:package": "depcheck && sort-package-json --check",
@@ -26,10 +26,14 @@
     "package.json": "yarn check:package",
     "*.ts": "yarn check:ts"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@slack/bolt": "^3.10.0",
+    "dotenv": "^16.0.0"
+  },
   "devDependencies": {
     "@commitlint/cli": "^16.2.1",
     "@commitlint/config-conventional": "^16.2.1",
+    "@types/node": "^16.11.26",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.13.0",
     "depcheck": "^1.4.3",
