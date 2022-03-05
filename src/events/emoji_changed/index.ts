@@ -1,4 +1,5 @@
 import { App, EmojiChangedEvent, SlackEventMiddlewareArgs } from "@slack/bolt";
+import { getChannels } from "./getChannels.js";
 
 // `EmojiChangedEvent` doesn't specify what's present for which subtype.
 // See: https://api.slack.com/events/emoji_changed
@@ -67,15 +68,13 @@ export const addEmojiChangedEventHandler = (app: App) => {
         return;
       }
 
-      // TODO
-      // 1. Figure out what server event was in
-      // 2. Figure out what channels the bot is in in that server (should probably cache; if cached, need new channel event listener)
-      // 3. Send alerts to those channels
-      await app.client.chat.postMessage({
-        channel: "TODO",
-        icon_emoji: icon,
-        text,
-      });
+      for await (const channel of getChannels(app, body.team_id)) {
+        await app.client.chat.postMessage({
+          channel,
+          text,
+          icon_emoji: icon,
+        });
+      }
     }
   );
 };
