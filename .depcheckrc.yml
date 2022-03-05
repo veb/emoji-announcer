@@ -2,3 +2,6 @@ ignores:
   # commitlint packages are used by husky, but not detected
   - "@commitlint/cli"
   - "@commitlint/config-conventional"
+  # Used to access types used by @slack/bolt
+  # Not importing it to avoid version mismatch issues
+  - "@slack/web-api"
