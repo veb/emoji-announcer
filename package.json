@@ -15,8 +15,10 @@
     "check:types": "tsc --noEmit",
     "fix:package": "sort-package-json",
     "fix:style": "yarn check:style --fix",
+    "postinstall": "npm run build",
     "lint": "yarn check:style",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "start": "node ./dist/app.js"
   },
   "commitlint": {
     "extends": [
