@@ -31,7 +31,8 @@
   },
   "dependencies": {
     "@slack/bolt": "^3.10.0",
-    "dotenv": "^16.0.0"
+    "dotenv": "^16.0.0",
+    "redis": "^4.0.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.1",
