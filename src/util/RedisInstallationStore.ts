@@ -4,14 +4,20 @@ import {
   InstallationStore,
 } from "@slack/bolt";
 
-import { RedisClientType, createClient } from "redis";
-import { ErrorWithData } from "./ErrorWithData";
+import IORedis from "ioredis";
+
+import { ErrorWithData } from "./ErrorWithData.js";
+
+// @types/ioredis is missing the `call` method...
+interface RedisClient extends IORedis.Redis {
+  call: (method: string, ...args: unknown[]) => unknown;
+}
 
 export class RedisInstallationStore implements InstallationStore {
-  public redis: RedisClientType;
-  constructor(redis: RedisClientType | string) {
-    this.redis =
-      typeof redis === "string" ? createClient({ url: redis }) : redis;
+  public redis: RedisClient;
+  constructor(url: string) {
+    // Type assertion is necessary to use the corrected type
+    this.redis = new IORedis(url) as RedisClient;
   }
 
   async storeInstallation(installation: Installation): Promise<void> {
@@ -23,8 +29,7 @@ export class RedisInstallationStore implements InstallationStore {
         installation,
       });
     }
-    // Redis doesn't seem to be happy unless we lie and say it's also a Date...
-    await this.redis.json.set(id, "$", installation as Installation & Date);
+    await this.redis.call("JSON.SET", id, "$", installation);
   }
 
   async fetchInstallation(
@@ -36,14 +41,14 @@ export class RedisInstallationStore implements InstallationStore {
         query,
       });
     }
-    const installation = await this.redis.json.get(id, { path: "$" });
+    const installation = await this.redis.call("JSON.GET", id, { path: "$" });
     if (installation == null || typeof installation !== "object") {
       throw new ErrorWithData("Fetching installation failed.", {
         installation,
       });
     }
     // The only data we store is installation data, so this must be an Installation
-    return installation as unknown as Installation;
+    return installation as Installation;
   }
 
   async deleteInstallation(query: InstallationQuery<boolean>): Promise<void> {
@@ -53,6 +58,6 @@ export class RedisInstallationStore implements InstallationStore {
         query,
       });
     }
-    await this.redis.json.del(id);
+    await this.redis.call("JSON.DEL", id);
   }
 }
