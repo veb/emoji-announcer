@@ -1,7 +1,7 @@
 import bolt from "@slack/bolt";
 import dotenv from "dotenv";
 import { Sequelize } from "sequelize";
-import { SequelizeInstallationStore } from "slack-bolt-sequelize";
+import SequelizeInstallationStore from "slack-bolt-sequelize";
 import { addEventHandlers } from "./events/index.js";
 import { ensureEnv } from "./util/index.js";
 
@@ -19,7 +19,7 @@ export const app = new bolt.App({
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   stateSecret: process.env.SLACK_STATE_SECRET,
-  installationStore: new SequelizeInstallationStore({
+  installationStore: new SequelizeInstallationStore.SequelizeInstallationStore({
     clientId: process.env.SLACK_CLIENT_ID,
     sequelize: new Sequelize(process.env.DATABASE_URL),
   }),
