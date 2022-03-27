@@ -8,6 +8,7 @@ import { ensureEnv } from "./util/index.js";
 dotenv.config();
 ensureEnv(process.env, "DATABASE_URL");
 ensureEnv(process.env, "PORT");
+ensureEnv(process.env, "SLACK_APP_SCOPES");
 ensureEnv(process.env, "SLACK_CLIENT_ID");
 ensureEnv(process.env, "SLACK_CLIENT_SECRET");
 ensureEnv(process.env, "SLACK_SIGNING_SECRET");
@@ -23,13 +24,7 @@ export const app = new bolt.App({
     clientId: process.env.SLACK_CLIENT_ID,
     sequelize: new Sequelize(process.env.DATABASE_URL),
   }),
-  scopes: [
-    "channels:read",
-    "chat:write",
-    "chat:write.customize",
-    "emoji:read",
-    "groups:read",
-  ],
+  scopes: process.env.SLACK_APP_SCOPES.split(","),
 });
 
 addEventHandlers(app);
