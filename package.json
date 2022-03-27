@@ -32,12 +32,12 @@
   "dependencies": {
     "@slack/bolt": "^3.10.0",
     "dotenv": "^16.0.0",
-    "ioredis": "^4.28.5"
+    "sequelize": "^6.17.0",
+    "slack-bolt-sequelize": "^0.2.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.1",
     "@commitlint/config-conventional": "^16.2.1",
-    "@types/ioredis": "^4.28.10",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.13.0",
     "depcheck": "^1.4.3",
