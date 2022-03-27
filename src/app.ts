@@ -6,13 +6,16 @@ import { addEventHandlers } from "./events/index.js";
 import { ensureEnv } from "./util/index.js";
 
 dotenv.config();
-ensureEnv(process.env, "DATABASE_URL");
-ensureEnv(process.env, "PORT");
-ensureEnv(process.env, "SLACK_APP_SCOPES");
-ensureEnv(process.env, "SLACK_CLIENT_ID");
-ensureEnv(process.env, "SLACK_CLIENT_SECRET");
-ensureEnv(process.env, "SLACK_SIGNING_SECRET");
-ensureEnv(process.env, "SLACK_STATE_SECRET");
+ensureEnv(process.env, [
+  "DATABASE_URL",
+  "PORT",
+  "SLACK_APP_SCOPES",
+  "SLACK_CLIENT_ID",
+  "SLACK_CLIENT_SECRET",
+  "SLACK_SIGNING_SECRET",
+  "SLACK_STATE_SECRET",
+] as const);
+// SLACK_DEVELOPER_MODE is also checked, but is not required
 
 export const app = new bolt.App({
   developerMode: process.env.SLACK_DEVELOPER_MODE === "true",
