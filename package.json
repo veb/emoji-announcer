@@ -32,6 +32,7 @@
   "dependencies": {
     "@slack/bolt": "^3.10.0",
     "dotenv": "^16.0.0",
+    "pg": "^8.7.3",
     "sequelize": "^6.17.0",
     "slack-bolt-sequelize": "^0.2.0"
   },
