@@ -5,5 +5,7 @@ ignores:
   # Used in getChannels.ts to access types used by @slack/bolt
   # Don't want to list it explicitly to avoid version mismatch issues
   - "@slack/web-api"
-  # Used internally by slack-bolt-sequelize
+  # Used internally by slack-bolt-sequelize (prod)
   - "pg"
+  # Used internally by slack-bolt-sequelize (dev)
+  - "sqlite3"
