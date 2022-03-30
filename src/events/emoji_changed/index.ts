@@ -38,32 +38,34 @@ const isAlias = (str: string | undefined): boolean =>
 export async function onEmojiChanged({
   body,
   client,
-  event,
+  payload,
 }: SlackEventMiddlewareArgs<"emoji_changed"> &
   AllMiddlewareArgs): Promise<void> {
   let text = "";
   let icon: string | undefined = undefined;
 
-  if (isEmojiAddedEvent(event)) {
-    const emoji = colonize(event.name);
+  if (isEmojiAddedEvent(payload)) {
+    const emoji = colonize(payload.name);
     const escaped = codify(emoji);
-    const url = event.value;
-    icon = event.name;
+    const url = payload.value;
+    icon = payload.name;
     if (isAlias(url)) {
       const original = codify(colonize(unalias(url)));
       text = `New emoji alias: ${emoji} ${escaped} (alias for ${original})`;
     } else {
       text = `New emoji: ${emoji} ${escaped}`;
     }
-  } else if (isEmojiRemovedEvent(event)) {
-    const removed = event.names.map((name) => codify(colonize(name))).join(" ");
+  } else if (isEmojiRemovedEvent(payload)) {
+    const removed = payload.names
+      .map((name) => codify(colonize(name)))
+      .join(" ");
     text = `Emoji removed: ${removed}`;
-  } else if (isEmojiRenamedEvent(event)) {
-    const emoji = colonize(event.new_name);
+  } else if (isEmojiRenamedEvent(payload)) {
+    const emoji = colonize(payload.new_name);
     const escaped = codify(emoji);
-    const prev = codify(colonize(event.old_name));
+    const prev = codify(colonize(payload.old_name));
     text = `Emoji name changed: ${emoji} ${escaped} (was ${prev})`;
-    icon = event.new_name;
+    icon = payload.new_name;
   } else {
     console.error("Unknown emoji event?", body);
     return;
