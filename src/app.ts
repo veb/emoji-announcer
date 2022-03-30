@@ -27,6 +27,9 @@ export const app = new bolt.App({
     clientId: process.env.SLACK_CLIENT_ID,
     sequelize: new Sequelize(process.env.DATABASE_URL),
   }),
+  installerOptions: {
+    directInstall: true,
+  },
   scopes: process.env.SLACK_APP_SCOPES.split(","),
 });
 
