@@ -1,5 +1,5 @@
-import bolt from "@slack/bolt";
-import { Channel } from "@slack/web-api/dist/response/UsersConversationsResponse";
+import type { WebClient } from "@slack/web-api";
+import type { Channel } from "@slack/web-api/dist/response/UsersConversationsResponse";
 
 class ChannelError extends Error {
   constructor(message: string, public channel: Channel) {
@@ -8,12 +8,12 @@ class ChannelError extends Error {
 }
 
 export async function* getChannels(
-  app: bolt.App,
+  client: WebClient,
   team: string
 ): AsyncGenerator<string, void, unknown> {
   let cursor: string | undefined = "";
   do {
-    const response = await app.client.users.conversations({
+    const response = await client.users.conversations({
       exclude_archived: true,
       limit: 1000,
       team_id: team,

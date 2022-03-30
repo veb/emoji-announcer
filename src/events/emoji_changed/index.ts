@@ -1,4 +1,8 @@
-import { App, EmojiChangedEvent, SlackEventMiddlewareArgs } from "@slack/bolt";
+import type {
+  AllMiddlewareArgs,
+  EmojiChangedEvent,
+  SlackEventMiddlewareArgs,
+} from "@slack/bolt";
 import { getChannels } from "./getChannels.js";
 
 // `EmojiChangedEvent` doesn't specify what's present for which subtype.
@@ -31,50 +35,45 @@ const isAlias = (str: string | undefined): boolean =>
  * @param event Slack event object
  * @returns Boolean indicating whether the event was handled
  */
-export const addEmojiChangedEventHandler = (app: App) => {
-  app.event(
-    "emoji_changed",
-    async function onEmojiChanged({
-      event,
-      body,
-    }: SlackEventMiddlewareArgs<"emoji_changed">): Promise<void> {
-      let text = "";
-      let icon: string | undefined = undefined;
+export async function onEmojiChanged({
+  body,
+  client,
+  event,
+}: SlackEventMiddlewareArgs<"emoji_changed"> &
+  AllMiddlewareArgs): Promise<void> {
+  let text = "";
+  let icon: string | undefined = undefined;
 
-      if (isEmojiAddedEvent(event)) {
-        const emoji = colonize(event.name);
-        const escaped = codify(emoji);
-        const url = event.value;
-        icon = event.name;
-        if (isAlias(url)) {
-          const original = codify(colonize(unalias(url)));
-          text = `New emoji alias: ${emoji} ${escaped} (alias for ${original})`;
-        } else {
-          text = `New emoji: ${emoji} ${escaped}`;
-        }
-      } else if (isEmojiRemovedEvent(event)) {
-        const removed = event.names
-          .map((name) => codify(colonize(name)))
-          .join(" ");
-        text = `Emoji removed: ${removed}`;
-      } else if (isEmojiRenamedEvent(event)) {
-        const emoji = colonize(event.new_name);
-        const escaped = codify(emoji);
-        const prev = codify(colonize(event.old_name));
-        text = `Emoji name changed: ${emoji} ${escaped} (was ${prev})`;
-        icon = event.new_name;
-      } else {
-        console.error("Unknown emoji event?", body);
-        return;
-      }
-
-      for await (const channel of getChannels(app, body.team_id)) {
-        await app.client.chat.postMessage({
-          channel,
-          text,
-          icon_emoji: icon,
-        });
-      }
+  if (isEmojiAddedEvent(event)) {
+    const emoji = colonize(event.name);
+    const escaped = codify(emoji);
+    const url = event.value;
+    icon = event.name;
+    if (isAlias(url)) {
+      const original = codify(colonize(unalias(url)));
+      text = `New emoji alias: ${emoji} ${escaped} (alias for ${original})`;
+    } else {
+      text = `New emoji: ${emoji} ${escaped}`;
     }
-  );
-};
+  } else if (isEmojiRemovedEvent(event)) {
+    const removed = event.names.map((name) => codify(colonize(name))).join(" ");
+    text = `Emoji removed: ${removed}`;
+  } else if (isEmojiRenamedEvent(event)) {
+    const emoji = colonize(event.new_name);
+    const escaped = codify(emoji);
+    const prev = codify(colonize(event.old_name));
+    text = `Emoji name changed: ${emoji} ${escaped} (was ${prev})`;
+    icon = event.new_name;
+  } else {
+    console.error("Unknown emoji event?", body);
+    return;
+  }
+
+  for await (const channel of getChannels(client, body.team_id)) {
+    await client.chat.postMessage({
+      channel,
+      text,
+      icon_emoji: icon,
+    });
+  }
+}
