@@ -7,11 +7,17 @@ class ChannelError extends Error {
   }
 }
 
+/**
+ * This method assumes that (a) emoji are added infrequently, so the API call to get channels will be done infrequently,
+ * and (2) the bot will only be added to a handful of channels per workspace, so it should only take one API call.
+ * @param client
+ * @param team
+ */
 export async function* getChannels(
   client: WebClient,
   team: string
 ): AsyncGenerator<string, void, unknown> {
-  let cursor: string | undefined = "";
+  let cursor = "";
   do {
     const response = await client.users.conversations({
       exclude_archived: true,
@@ -19,10 +25,10 @@ export async function* getChannels(
       team_id: team,
       types: "public_channel,private_channel",
     });
-    cursor = response.response_metadata?.next_cursor;
+    cursor = response.response_metadata?.next_cursor ?? "";
     for (const channel of response.channels ?? []) {
       if (channel.id) yield channel.id;
       else throw new ChannelError(`Channel is missing ID.`, channel);
     }
-  } while (cursor != null && cursor !== "");
+  } while (cursor !== "");
 }
