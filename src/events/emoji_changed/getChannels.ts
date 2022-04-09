@@ -28,8 +28,12 @@ export async function* getChannels(
     });
     cursor = response.response_metadata?.next_cursor ?? "";
     for (const channel of response.channels ?? []) {
-      if (channel.id) yield channel.id;
-      else throw new ChannelError(`Channel is missing ID.`, channel);
+      if (channel.id) {
+        console.debug(`Found channel ${channel.id ?? "<???>"} in ${team}.`);
+        yield channel.id;
+      } else {
+        throw new ChannelError(`Channel is missing ID.`, channel);
+      }
     }
   } while (cursor !== "");
 }

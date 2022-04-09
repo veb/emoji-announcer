@@ -20,7 +20,8 @@ async function sendMessages(id: string) {
   const batch = events.flush(id);
   console.log(`Sending batch of ${batch.length} emoji messages to ${id}.`);
   const message = parseEmojiChangedEvents(batch);
-  if (!message.text) return; // Nothing to say
+  console.log(`Sending to ${id}:`, message);
+  if (!message.text) return;
   const { client } = batch[0];
   for await (const channel of getChannels(client, id)) {
     await client.chat.postMessage({
