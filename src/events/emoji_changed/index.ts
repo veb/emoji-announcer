@@ -18,6 +18,7 @@ const events = new Accumulator<string, EmojiChangedMiddlewareArgs>();
  */
 async function sendMessages(id: string) {
   const batch = events.flush(id);
+  console.log(`Sending batch of ${batch.length} emoji messages to ${id}.`);
   const message = parseEmojiChangedEvents(batch);
   if (!message.text) return; // Nothing to say
   const { client } = batch[0];
@@ -42,4 +43,6 @@ export function onEmojiChanged(event: EmojiChangedMiddlewareArgs): void {
   }
   const id = event.body.team_id;
   events.append(id, event);
+  debounceById(id, sendMessages, BATCH_DELAY, id);
+  console.log(`Received emoji ${type} event in ${id}.`);
 }
