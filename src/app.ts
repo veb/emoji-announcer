@@ -17,23 +17,26 @@ ensureEnv(process.env, [
 ] as const);
 // SLACK_DEVELOPER_MODE is also checked, but is not required
 
+const installationStore =
+  new SequelizeInstallationStore.SequelizeInstallationStore({
+    clientId: process.env.SLACK_CLIENT_ID,
+    sequelize: new Sequelize(process.env.DATABASE_URL),
+  });
+
 export const app = new bolt.App({
   developerMode: process.env.SLACK_DEVELOPER_MODE === "true",
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   stateSecret: process.env.SLACK_STATE_SECRET,
-  installationStore: new SequelizeInstallationStore.SequelizeInstallationStore({
-    clientId: process.env.SLACK_CLIENT_ID,
-    sequelize: new Sequelize(process.env.DATABASE_URL),
-  }),
+  installationStore,
   installerOptions: {
     directInstall: true,
   },
   scopes: process.env.SLACK_APP_SCOPES.split(","),
 });
 
-addEventHandlers(app);
+addEventHandlers(app, installationStore);
 
 await app.start(Number(process.env.PORT));
 console.log("Up and running!");
