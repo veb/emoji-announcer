@@ -27,6 +27,9 @@ export async function* getChannels(
       types: "public_channel,private_channel",
     });
     cursor = response.response_metadata?.next_cursor ?? "";
+    console.log(
+      `Found ${response.channels?.length ?? "no"} channels in ${team}.`
+    );
     for (const channel of response.channels ?? []) {
       if (channel.id) {
         console.debug(`Found channel ${channel.id ?? "<???>"} in ${team}.`);
