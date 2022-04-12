@@ -5,6 +5,7 @@ import { getChannels } from "./getChannels.js";
 import { parseEmojiChangedEvents } from "./parse.js";
 
 const BATCH_DELAY = Number(process.env.EMOJI_ANNOUNCER_BATCH_DELAY ?? 60e3);
+const BATCH_SIZE = Number(process.env.EMOJI_ANNOUNCER_BATCH_SIZE ?? 100);
 
 type EmojiChangedMiddlewareArgs = AllMiddlewareArgs &
   SlackEventMiddlewareArgs<"emoji_changed">;
@@ -12,22 +13,29 @@ type EmojiChangedMiddlewareArgs = AllMiddlewareArgs &
 const events = new Accumulator<string, EmojiChangedMiddlewareArgs>();
 
 /**
- * Sends an alert about emoji_changed events to every channel the bot is in.
- * @param id Team ID to send messages for
- * @returns
+ * Sends alerts about emoji_changed events to every channel the bot is in. If there's a real flood of changes, it will
+ * send messages in batches.
+ * @param id ID of team to send messages to
  */
-async function sendMessages(id: string) {
-  const batch = events.flush(id);
-  console.log(`Sending batch of ${batch.length} emoji messages to ${id}.`);
-  const message = parseEmojiChangedEvents(batch);
-  console.log(`Sending to ${id}:`, message);
-  if (!message.text) return;
-  const { client } = batch[0];
-  for await (const channel of getChannels(client, id)) {
-    await client.chat.postMessage({
-      ...message,
-      channel,
-    });
+async function sendMessages(id: string): Promise<void> {
+  const batches = events.flush(id);
+  const { client } = batches[0];
+  const channels = await getChannels(client, id);
+  console.log(
+    `Reporting ${batches.length} emoji_changed events to ${channels.length} channels in ${id}.`
+  );
+
+  while (batches.length) {
+    const batch = batches.splice(0, BATCH_SIZE);
+    const message = parseEmojiChangedEvents(batch);
+    if (!message.text) continue;
+    console.log(`Sending to ${id}:`, message);
+    for (const channel of channels) {
+      await client.chat.postMessage({
+        ...message,
+        channel,
+      });
+    }
   }
 }
 

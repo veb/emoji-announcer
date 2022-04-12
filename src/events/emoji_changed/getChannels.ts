@@ -1,11 +1,4 @@
 import type { WebClient } from "@slack/web-api";
-import type { Channel } from "@slack/web-api/dist/response/UsersConversationsResponse";
-
-class ChannelError extends Error {
-  constructor(message: string, public channel: Channel) {
-    super(message);
-  }
-}
 
 /**
  * This method assumes that (a) emoji are added infrequently, so the API call to get channels will be done infrequently,
@@ -14,11 +7,12 @@ class ChannelError extends Error {
  * @param client
  * @param team
  */
-export async function* getChannels(
+export async function getChannels(
   client: WebClient,
   team: string
-): AsyncGenerator<string, void, unknown> {
+): Promise<string[]> {
   let cursor = "";
+  const channels: string[] = [];
   do {
     const response = await client.users.conversations({
       exclude_archived: true,
@@ -33,10 +27,11 @@ export async function* getChannels(
     for (const channel of response.channels ?? []) {
       if (channel.id) {
         console.debug(`Found channel ${channel.id ?? "<???>"} in ${team}.`);
-        yield channel.id;
+        channels.push(channel.id);
       } else {
-        throw new ChannelError(`Channel is missing ID.`, channel);
+        throw Object.assign(new Error(`Channel is missing ID.`), { channel });
       }
     }
   } while (cursor !== "");
+  return channels;
 }
