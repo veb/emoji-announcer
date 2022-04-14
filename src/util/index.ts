@@ -1,3 +1,3 @@
 export * from "./Accumulator.js";
-export * from "./batchalyzer.js";
+export * from "./batchalyze.js";
 export * from "./ensureEnv.js";
