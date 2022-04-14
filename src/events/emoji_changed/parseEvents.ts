@@ -34,7 +34,7 @@ const unalias = (str: string): string => str && str.slice(6);
 
 /**
  * Writes a sentence about the emoji_changed event
- * @param event - Single emoji_changed event
+ * @param event Single emoji_changed event
  * @returns Human-readable string describing the event
  */
 export function getEventSummary({

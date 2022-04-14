@@ -4,12 +4,11 @@ import { sendMessages } from "./sendMessages.js";
 
 const BATCH_DELAY = Number(process.env.EMOJI_ANNOUNCER_BATCH_DELAY ?? 30e3);
 const BATCH_SIZE = Number(process.env.EMOJI_ANNOUNCER_BATCH_SIZE ?? 100);
-
 const batchalyzer = new Batchalyzer(sendMessages, BATCH_DELAY, BATCH_SIZE);
 
 /**
- * Parse emoji_changed events and send alerts to every channel the bot is in
- * @param event Slack event object
+ * Parses emoji_changed events and send alerts to every channel the bot is in
+ * @param event Slack emoji_changed event
  */
 export async function onEmojiChanged(
   event: SlackEventMiddlewareArgs<"emoji_changed"> & AllMiddlewareArgs

@@ -1,8 +1,18 @@
 import { Accumulator } from "./Accumulator.js";
 
+/**
+ * A keyed accumulator + debouncer, I guess? Naming things is hard. It takes a callback, which gets called after the
+ * specified delay, or after the specified number of wrapped invocations, whichever is sooner. The callback is passed
+ * all of the values that were passed to the wrapped method, as an array.
+ */
 export class Batchalyzer<K, V> {
   private timers = new Map<K, NodeJS.Timeout>();
   private payloads = new Accumulator<K, V>();
+  /**
+   * @param callback Method to invoke
+   * @param batchDelay Delay in milliseconds to wait after last invocation before calling callback
+   * @param batchSize Maximum number of invocations before calling callback without delay
+   */
   constructor(
     private callback: (key: K, values: V[]) => void | Promise<void>,
     private batchDelay: number,

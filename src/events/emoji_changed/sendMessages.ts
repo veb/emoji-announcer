@@ -3,9 +3,9 @@ import { getChannels } from "./getChannels.js";
 import { parseEmojiChangedEvents } from "./parseEvents.js";
 
 /**
- * Sends alerts about emoji_changed events to every channel the bot is in. If there's a real flood of changes, it will
- * send messages in batches.
+ * Sends alerts about emoji_changed events to every channel the bot is in.
  * @param id ID of team to send messages to
+ * @param events List of Slack emoji_changed events to send messages about
  */
 export async function sendMessages(
   id: string,

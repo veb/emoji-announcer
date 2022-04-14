@@ -1,11 +1,10 @@
 import type { WebClient } from "@slack/web-api";
 
 /**
- * This method assumes that (a) emoji are added infrequently, so the API call to get channels will be done infrequently,
- * and (2) the bot will only be added to a handful of channels per workspace, so it should only take one API call. With
- * the default batch delay, this should only be called at most once per minute per team.
- * @param client
- * @param team
+ * Gets the full list of channels that the bot is in for the given team.
+ * @param client Slack web client
+ * @param team Slack team ID
+ * @returns List of channel IDs
  */
 export async function getChannels(
   client: WebClient,
