@@ -1,4 +1,4 @@
-import { Accumulator } from "./Accumulator";
+import { Accumulator } from "./Accumulator.js";
 
 const BATCH_DELAY = Number(process.env.EMOJI_ANNOUNCER_BATCH_DELAY ?? 30e3);
 const BATCH_SIZE = Number(process.env.EMOJI_ANNOUNCER_BATCH_SIZE ?? 100);
