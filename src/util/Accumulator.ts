@@ -11,4 +11,9 @@ export class Accumulator<K, V> {
     const list = this.map.get(key) ?? [];
     this.map.set(key, list.concat(value));
   }
+
+  count(key: K): number {
+    const list = this.map.get(key);
+    return list?.length ?? 0;
+  }
 }
