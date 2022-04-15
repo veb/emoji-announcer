@@ -2,6 +2,8 @@
 
 [![Add to Slack](https://platform.slack-edge.com/img/add_to_slack.png)](https://slack.com/oauth/v2/authorize?client_id=19362919508.3176143454119&scope=chat:write,chat:write.customize,emoji:read,channels:read,groups:read&user_scope=)
 
+Want to know when new emoji are added to your workspace, so that your coworkers marvel at how hip and trendy you are? Add Emoji Announcer to your workspace, so you receive an alert every time an emoji is changed! Simply add the bot to any channel, and it will post in the channel any time an emoji is added, removed, or renamed.
+
 ## Installation & Usage
 
 Getting Emoji Announcer up and running is super easy! Simply [install the app](https://slack.com/oauth/v2/authorize?client_id=19362919508.3176143454119&scope=chat:write,chat:write.customize,emoji:read,channels:read,groups:read&user_scope=) and then add `@Emoji Announcer` to the channels where you want emoji alerts to be sent.
