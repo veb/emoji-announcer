@@ -9,7 +9,6 @@ dotenv.config();
 ensureEnv(process.env, [
   "DATABASE_URL",
   "PORT",
-  "SLACK_APP_SCOPES",
   "SLACK_CLIENT_ID",
   "SLACK_CLIENT_SECRET",
   "SLACK_SIGNING_SECRET",
@@ -33,7 +32,13 @@ export const app = new bolt.App({
   installerOptions: {
     directInstall: true,
   },
-  scopes: process.env.SLACK_APP_SCOPES.split(","),
+  scopes: [
+    "channels:read",
+    "chat:write",
+    "chat:write:customize",
+    "emoji:read",
+    "groups:read",
+  ],
 });
 
 addEventHandlers(app, installationStore);
