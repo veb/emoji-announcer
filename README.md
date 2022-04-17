@@ -1,4 +1,4 @@
-# Slack Emoji Announcer 🤖📣
+# Emoji Announcer for Slack 🤖
 
 Want to know when new emoji are added to your workspace, so that your coworkers marvel at how hip and trendy you are? Add Emoji Announcer to your workspace, so you receive an alert every time an emoji is changed! Simply add the bot to any channel, and it will post in the channel any time an emoji is added, removed, or renamed.
 
