@@ -35,7 +35,7 @@ export const app = new bolt.App({
   scopes: [
     "channels:read",
     "chat:write",
-    "chat:write:customize",
+    "chat:write.customize",
     "emoji:read",
     "groups:read",
   ],
