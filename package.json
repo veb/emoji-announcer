@@ -1,8 +1,8 @@
 {
-  "name": "slack-emoji-announcer",
+  "name": "emoji-announcer",
   "version": "0.0.0",
   "description": "Announces changes to custom emoji in Slack.",
-  "repository": "gitlab:wjharney/slack-emoji-announcer",
+  "repository": "gitlab:wjharney/emoji-announcer",
   "license": "MIT",
   "author": "Will Harney <9564874-wjharney@users.noreply.gitlab.com>",
   "type": "module",
