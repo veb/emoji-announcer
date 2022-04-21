@@ -17,7 +17,7 @@ export async function sendMessages(
   console.log(
     `Reporting ${events.length} emoji_changed events to ${channels.length} channels in ${id}.`
   );
-
+  if (!channels.length) return;
   const message = parseEmojiChangedEvents(events);
   if (!message.text) return;
   console.log(`Sending to ${id}:`, message);
