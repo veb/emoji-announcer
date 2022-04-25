@@ -19,7 +19,7 @@
     "lint": "yarn check:style",
     "prepare": "husky install",
     "start": "node ./dist/app.js",
-    "test": "mocha"
+    "test": "mocha 'src/**/*.test.ts'"
   },
   "commitlint": {
     "extends": [
