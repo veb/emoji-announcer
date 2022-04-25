@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { use, expect } from "chai";
 import sinon from "sinon";
 import sinonChai from "sinon-chai";
