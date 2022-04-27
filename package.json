@@ -8,6 +8,7 @@
   "type": "module",
   "exports": "./dist/app.js",
   "scripts": {
+    "_postinstall": "npm run build",
     "build": "tsc",
     "check:package": "depcheck . && sort-package-json --check",
     "check:style": "eslint src",
@@ -15,8 +16,9 @@
     "check:types": "tsc --noEmit",
     "fix:package": "sort-package-json",
     "fix:style": "yarn check:style --fix",
-    "postinstall": "npm run build",
     "lint": "yarn check:style",
+    "prepack": "pinst --enable",
+    "postpack": "pinst --disable",
     "prepare": "husky install",
     "start": "node ./dist/app.js",
     "test": "mocha 'src/**/*.test.ts'"
@@ -55,6 +57,7 @@
     "husky": "^6.0.0",
     "lint-staged": "^12.4.0",
     "mocha": "^9.2.2",
+    "pinst": "^3.0.0",
     "prettier": "^2.6.2",
     "sinon": "^13.0.2",
     "sinon-chai": "^3.7.0",
