@@ -29,7 +29,7 @@ export async function onEmojiChanged(
   }
   const id = event.body.team_id;
   console.log(
-    `Received emoji ${type} event in ${id}. Waiting ${BATCH_DELAY} ms...`
+    `Received event ${event.body.event_id} (emoji ${type} event) in ${id}. Waiting ${BATCH_DELAY} ms...`
   );
   await batchedSendMessages(id, event);
 }
