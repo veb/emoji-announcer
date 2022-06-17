@@ -2,15 +2,17 @@ import type { AllMiddlewareArgs, SlackEventMiddlewareArgs } from "@slack/bolt";
 import { batchalyze } from "../../util/index.js";
 import { sendMessages } from "./sendMessages.js";
 
-const BATCH_DELAY = Number(process.env.EMOJI_ANNOUNCER_BATCH_DELAY ?? 30e3);
+// Ideally, the batch delay would be shorter, as I'd expect most users take less than a minute to upload consecutive
+// emoji. However, Slack sends duplicate events if the app doesn't respond within 3 seconds, which is longer than the
+// app takes to boot from idle on Heroku. As a result, the app receives 3 duplicate events, and the last ~60s after the
+// first. The best solution would be to improve app start time to less than 3 seconds, but the easy solution is to just
+// increase the batch delay and dedupe the events.
+const BATCH_DELAY = Number(process.env.EMOJI_ANNOUNCER_BATCH_DELAY ?? 65e3);
 const BATCH_SIZE = Number(process.env.EMOJI_ANNOUNCER_BATCH_SIZE ?? 100);
 const batchedSendMessages = batchalyze({
   batchDelay: BATCH_DELAY,
   batchSize: BATCH_SIZE,
   callback: sendMessages,
-  // This app is deployed to Heroku. It often goes idle, and is booted when it receives an event. The app will store the
-  // event, but the response time while booting is evidently too long for Slack, and Slack sends duplicate events. To
-  // avoid sending 3 notifications for the first event that restarted the app, we need to pass a method to dedupe them.
   dedupe: (a, b) => a.body.event_id === b.body.event_id,
 });
 
