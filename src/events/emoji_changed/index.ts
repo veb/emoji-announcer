@@ -7,6 +7,7 @@ import { sendMessages } from "./sendMessages.js";
 // app takes to boot from idle on Heroku. As a result, the app receives 3 duplicate events, and the last ~60s after the
 // first. The best solution would be to improve app start time to less than 3 seconds, but the easy solution is to just
 // increase the batch delay and dedupe the events.
+// TODO: Now that the app is deployed on Railway, can the delay be reduced?
 const BATCH_DELAY = Number(process.env.EMOJI_ANNOUNCER_BATCH_DELAY ?? 65e3);
 const BATCH_SIZE = Number(process.env.EMOJI_ANNOUNCER_BATCH_SIZE ?? 100);
 const batchedSendMessages = batchalyze({

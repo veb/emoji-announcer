@@ -14,7 +14,7 @@ If you encounter any bugs, please [file an issue](https://gitlab.com/wjharney/em
 
 ## Development
 
-This app is designed to be installed in multiple Slack workspaces. It is deployed to Heroku and uses [Heroku Postgres](https://www.heroku.com/postgres) for the database.
+This app is designed to be installed in multiple Slack workspaces. It is deployed to [Railway](https://railway.app) and uses [PostgreSQL](https://docs.railway.app/databases/postgresql) for the database.
 
 ### Requirements
 
