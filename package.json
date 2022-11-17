@@ -33,11 +33,10 @@
     "*.ts": "yarn run check:ts"
   },
   "dependencies": {
-    "@slack/bolt": "^3.10.0",
-    "dotenv": "^16.0.0",
-    "pg": "^8.7.3",
-    "sequelize": "^6.17.0",
-    "slack-bolt-sequelize": "^0.2.0"
+    "@slack/bolt": "^3.12.2",
+    "dotenv": "^16.0.3",
+    "pg": "^8.8.0",
+    "slack-bolt-sequelize": "^0.3.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.1",

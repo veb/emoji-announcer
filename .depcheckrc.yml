@@ -7,5 +7,7 @@ ignores:
   - "@slack/web-api"
   # Used internally by slack-bolt-sequelize (prod)
   - "pg"
+  # Provided by slack-bolt-sequelize; type errors can occur if we try to bring our own
+  - "sequelize"
   # Used internally by slack-bolt-sequelize (dev)
   - "sqlite3"
